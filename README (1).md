@@ -298,33 +298,35 @@ Efek ini hanya dipicu oleh perubahan `districtId` (bukan `provinces`/`regencies`
 
 Pada bagian ini akan diberikan beberapa tangkapan layar atau screenshot dari aplikasi yang sebelumnya telah di bangun. Screenshot ini digunakan untuk menunjukkan bahwa fitur pemilihan wilayah dan tampilan informasi cuaca telah berhasil diterapkan pada sisi antarmuka.
 
-### 3.1 Tampilan Awal (Sebelum Wilayah Dipilih)
+### 3.1 Tampilan Awal
 
-Menampilkan halaman utama dengan dropdown Provinsi, Kabupaten/Kota, dan Kecamatan dalam kondisi kosong, serta pesan "Pilih wilayah di atas untuk melihat cuacanya."
+Bagian ini akan menampilkan halaman utama dengan dropdown Provinsi, Kabupaten/Kota, dan Kecamatan dalam kondisi kosong, serta pesan "Pilih wilayah di atas untuk melihat cuacanya."
 
-![alt text](image-1.png)
+<img width="334" height="420" alt="Screenshot 2026-09-02 193747" src="https://github.com/user-attachments/assets/c03a481a-f12d-4d79-80f7-f70bdc0f4404" />
 
 ### 3.2 Kondisi Loading
 
-Menampilkan skeleton/spinner (`LoadingUI`) saat aplikasi sedang mengambil data wilayah dari dropdown atau saat sedang memproses geocoding dan data cuaca setelah kecamatan dipilih.
+Bagian ini akan menampilkan spinner atau LoadingUI saat aplikasi sedang mengambil data wilayah dari dropdown atau saat sedang memproses geocoding dan data cuaca setelah kecamatan dipilih.
+
+<img width="364" height="280" alt="Screenshot 2026-09-02 193725" src="https://github.com/user-attachments/assets/9f7c9ea2-76fa-49e0-8b68-1334fd75b1e0" />
 
 ### 3.3 Kondisi Sukses
 
-Menampilkan `WeatherCard` dengan data cuaca hasil fetch: nama lokasi, suhu, ikon kondisi cuaca, kecepatan angin, dan waktu pengukuran, untuk salah satu wilayah yang dipilih (misalnya kecamatan di Bali).
+Bagian ini akan menampilkan WeatherCard dengan data cuaca hasil fetch nama lokasi, suhu, ikon kondisi cuaca, kecepatan angin, dan waktu pengukuran, untuk salah satu wilayah yang dipilih, misalnya kecamatan di Bali). Untuk lebih jelasnya berikut merupakan tampilan yang dimaksud.
 
-![Kondisi Sukses](screenshots/03-sukses.png)
+<img width="284" height="422" alt="Screenshot 2026-09-02 194820" src="https://github.com/user-attachments/assets/d8f4226f-9f3a-461a-afae-53686be83288" />
 
 ### 3.4 Kondisi Error
 
-Menampilkan `ErrorMsg` dengan UI peringatan merah, misalnya saat koneksi internet diputus atau salah satu endpoint API tidak dapat diakses.
+Bagian ini akan menampilkan ErrorMsg dengan UI peringatan merah, misalnya saat koneksi internet diputus atau salah satu endpoint API tidak dapat diakses. Untuk lebih jelasnya berikut merupakan tampilan yang dimaksud.
 
-![Kondisi Error](screenshots/04-error.png)
+<img width="370" height="454" alt="Screenshot 2026-09-02 164458" src="https://github.com/user-attachments/assets/091b7a31-7896-490a-a8c4-485d59b2c0f0" />
 
 ---
 
 ## 4. Log Prompt AI
 
-Berikut merupakan prompt persis yang digunakan untuk menghasilkan source code awal proyek "Nusantara Weather Explorer" ini.
+Bagian ini berisikan prompt persis yang digunakan untuk menghasilkan source code awal proyek hingga menjadi sebuah web app utuh yang dapat bekerja dengan baik. Untuk lebih jelasnya berikut merupakan prompt yang dimaksud.
 
 **Peran Anda:** Bertindaklah sebagai Senior React.js Web Developer yang ahli dalam membangun arsitektur aplikasi modular dan integrasi REST API.
 
