@@ -7,9 +7,7 @@ Suplemen Pertemuan 5: Hands-On Laravel REST API & SQLite
 |---|---|
 | **Nama** | Kelvin |
 | **NIM** | 2505551007 |
-| **Program Studi** | Teknologi Informasi |
-| **Fakultas** | Teknik, Universitas Udayana |
-| **Mata Kuliah** | Pemrograman Internet |
+| **Mata Kuliah** | Pemrograman Internet (B) |
 
 ---
 
@@ -28,17 +26,17 @@ Suplemen Pertemuan 5: Hands-On Laravel REST API & SQLite
 
 ## Gambaran Umum Aplikasi
 
-Kontak App adalah aplikasi manajemen kontak berbasis web yang dibangun dengan arsitektur terpisah antara backend dan frontend. Backend berperan murni sebagai penyedia REST API menggunakan Laravel 11 dengan database SQLite, sedangkan frontend dibangun sebagai Single Page Application menggunakan React yang dikompilasi oleh Vite. Keduanya berkomunikasi lewat pertukaran data JSON dengan autentikasi berbasis API token dari Laravel Sanctum.
+Pada kesempatan kali ini penulis hendak membangun sebuah aplikasi Kontak API, di mana aplikasi ini akan melakukan manajemen kontak berbasis web yang dibangun dengan arsitektur terpisah antara backend dan frontend. Backend berperan murni sebagai penyedia REST API menggunakan Laravel 11 dengan database SQLite, sedangkan frontend dibangun sebagai Single Page Application menggunakan React yang dikompilasi oleh Vite. Keduanya berkomunikasi lewat pertukaran data JSON dengan autentikasi berbasis API token dari Laravel Sanctum.
 
-Fitur utama yang tersedia meliputi registrasi dan login pengguna, serta operasi CRUD penuh terhadap data kontak milik pengguna yang sedang masuk. Setiap kontak dapat menyimpan lebih dari satu nomor telepon melalui relasi one-to-many, mengikuti pola relasi `kontak` dan `kontak_phones` yang dicontohkan pada slide suplemen. Seluruh data kontak terisolasi per pengguna, sehingga pengguna A tidak dapat melihat maupun mengubah kontak milik pengguna B.
+Fitur utama yang tersedia meliputi registrasi dan login pengguna, serta operasi CRUD penuh terhadap data kontak milik pengguna yang sedang masuk. Setiap kontak dapat menyimpan lebih dari satu nomor telepon melalui relasi one-to-many, mengikuti pola relasi `kontak` dan `kontak_phones`. Seluruh data kontak terisolasi per pengguna, sehingga pengguna A tidak dapat melihat maupun mengubah kontak milik pengguna B.
 
 ### Teknologi yang Digunakan
 
 | Lapisan | Teknologi | Versi |
 |---|---|---|
 | Backend Framework | Laravel | 11 |
-| Database | SQLite | — |
-| Autentikasi | Laravel Sanctum (API Token) | — |
+| Database | SQLite | - |
+| Autentikasi | Laravel Sanctum (API Token) | - |
 | Frontend Library | React | 19 |
 | Build Tool | Vite | 8 |
 | Routing Frontend | React Router DOM | 7 |
@@ -78,7 +76,7 @@ kontak-api/
         └── pages/                   # Halaman sesuai route
 ```
 
-Struktur di atas memperlihatkan pemisahan tanggung jawab yang jelas antara lapisan data, lapisan logika, dan lapisan tampilan. Folder `app/` berisi seluruh logika backend, sementara `resources/js/` menampung keseluruhan aplikasi React yang berjalan di sisi klien. Pemisahan semacam ini memudahkan penelusuran ketika terjadi kesalahan, karena kita langsung tahu di lapisan mana masalah harus dicari.
+Pada kode di atas dapat dilihat bahwa telah dilakukannya pemisahan tanggung jawab yang jelas antara lapisan data, lapisan logika, dan lapisan tampilan. Folder `app/` berisi seluruh logika backend, sementara `resources/js/` menampung keseluruhan aplikasi React yang berjalan di sisi klien. Pemisahan semacam ini memudahkan penelusuran ketika terjadi kesalahan, karena kita langsung tahu di lapisan mana masalah harus dicari.
 
 ---
 
@@ -95,11 +93,11 @@ cd kontak-api
 
 Setelah perintah selesai dijalankan, Composer secara otomatis menyalin file `.env.example` menjadi `.env` dan membuatkan `APP_KEY` baru. Seluruh perintah pada tahap-tahap berikutnya dijalankan dari dalam direktori `kontak-api` ini, karena di situlah file `artisan`, `composer.json`, dan `package.json` berada.
 
-> **Template Gambar**
+> **Dokumentasi 1**
 >
-> ![Proses instalasi Laravel 11 via Composer](./docs/img/01-composer-create-project.png)
+> <img width="959" height="545" alt="Screenshot 2026-09-15 143059" src="https://github.com/user-attachments/assets/c052f351-6e66-4f83-a8d5-f2dc5e7d17b1" />
 >
-> *Gambar 1.1 — Proses instalasi project Laravel 11 melalui Composer.*
+> *Gambar 1.1 Proses instalasi project Laravel 11 melalui Composer.*
 >
 > Tangkapan layar di atas memperlihatkan Composer sedang mengunduh paket-paket dependensi Laravel satu per satu ke dalam folder `vendor/`. Proses ini biasanya memakan waktu beberapa menit tergantung kecepatan koneksi internet. Baris terakhir yang menandakan keberhasilan adalah pesan pembuatan `APP_KEY` secara otomatis oleh Laravel.
 
@@ -128,11 +126,11 @@ DB_DATABASE=database/db_kontak.sqlite
 
 Konfigurasi ini memberi tahu Laravel bahwa driver database yang dipakai adalah SQLite, bukan MySQL bawaan. Nilai `DB_DATABASE` diisi dengan path relatif menuju file database, dihitung dari root project. Pada file `config/database.php`, nilai tersebut dibaca melalui `env('DB_DATABASE', database_path('database.sqlite'))` sehingga pengaturan di `.env` akan menimpa nilai bawaannya.
 
-> **Template Gambar**
+> **Dokumentasi 2**
 >
-> ![Isi file .env bagian konfigurasi database](./docs/img/02-env-sqlite.png)
+> <img width="701" height="445" alt="Screenshot 2026-09-16 225550" src="https://github.com/user-attachments/assets/a7927240-fb5e-4a06-8917-e5e15f5743bd" />
 >
-> *Gambar 1.2 — Konfigurasi koneksi SQLite pada file `.env`.*
+> *Gambar 1.2 Konfigurasi koneksi SQLite pada file `.env`.*
 >
 > Gambar ini menampilkan potongan file `.env` yang sudah diubah pada bagian konfigurasi database. Baris `DB_CONNECTION` diisi `sqlite` dan `DB_DATABASE` menunjuk langsung ke file `database/db_kontak.sqlite`. Baris-baris konfigurasi MySQL seperti `DB_HOST`, `DB_PORT`, `DB_USERNAME`, dan `DB_PASSWORD` tidak lagi diperlukan dan bisa dikomentari atau dibiarkan saja.
 
@@ -194,11 +192,11 @@ Perlu diperhatikan juga penggunaan cast `'password' => 'hashed'`. Dengan cast in
 
 Alur autentikasi pada aplikasi ini berjalan sebagai berikut. Ketika pengguna berhasil register atau login, server menerbitkan sebuah token teks acak dan mengirimkannya dalam response JSON. Frontend menyimpan token tersebut di `localStorage` browser, lalu menyertakannya pada header `Authorization: Bearer <token>` di setiap permintaan berikutnya. Middleware `auth:sanctum` di sisi server akan memeriksa token itu dan menolak permintaan dengan status 401 apabila tokennya tidak valid atau sudah dihapus.
 
-> **Template Gambar**
+> **Dokumentasi 3**
 >
-> ![Hasil instalasi Sanctum di terminal](./docs/img/03-install-api-sanctum.png)
+> <img width="782" height="221" alt="Screenshot 2026-09-15 143126" src="https://github.com/user-attachments/assets/8289c4dd-d473-46b3-aac3-282c0da6fe2d" />
 >
-> *Gambar 2.1 — Keluaran perintah `php artisan install:api`.*
+> *Gambar 2.1 Keluaran perintah `php artisan install:api`.*
 >
 > Tangkapan layar ini memperlihatkan keluaran terminal saat perintah `install:api` dijalankan. Terlihat Laravel meminta konfirmasi untuk menjalankan migration, kemudian melaporkan bahwa file `routes/api.php` berhasil dibuat. Setelah tahap ini, seluruh endpoint yang kita definisikan di `routes/api.php` otomatis dapat diakses dengan awalan `/api`.
 
@@ -295,11 +293,11 @@ php artisan migrate
 
 Perintah ini membaca seluruh file di folder `database/migrations/` secara berurutan berdasarkan timestamp pada nama filenya, lalu mengeksekusi method `up()` masing-masing. Apabila terjadi kesalahan skema di tengah pengembangan, `php artisan migrate:fresh` dapat digunakan untuk menghapus seluruh tabel dan membangunnya kembali dari nol.
 
-> **Template Gambar**
+> **Dokumentasi 4**
 >
-> ![Hasil eksekusi migration di terminal](./docs/img/04-migrate-result.png)
+> <img width="787" height="229" alt="Screenshot 2026-09-16 230041" src="https://github.com/user-attachments/assets/85ec03b2-2b02-43cd-8310-0796cd28dbed" />
 >
-> *Gambar 3.1 — Keluaran perintah `php artisan migrate`.*
+> *Gambar 3.1 Keluaran perintah `php artisan migrate`.*
 >
 > Gambar ini menampilkan daftar migration yang berhasil dijalankan beserta durasi eksekusi masing-masing dalam milidetik. Terlihat tabel `users`, `cache`, `jobs`, `personal_access_tokens`, `contacts`, dan `contact_phones` terbentuk secara berurutan. Status `DONE` di sisi kanan setiap baris menandakan tidak ada migration yang gagal dieksekusi.
 
@@ -554,22 +552,6 @@ Route::view('/{any}', 'welcome')->where('any', '^(?!api).*$');
 ```
 
 Pola regex `^(?!api).*$` menggunakan negative lookahead untuk mencocokkan semua URL kecuali yang diawali kata `api`. Tanpa aturan ini, membuka `127.0.0.1:8000/contacts/create` secara langsung atau menekan tombol refresh pada halaman tersebut akan menghasilkan error 404 dari Laravel, karena Laravel tidak mengenali rute yang sebenarnya hanya ada di sisi React.
-
-> **Template Gambar**
->
-> ![Pengujian endpoint API menggunakan Postman](./docs/img/05-postman-test.png)
->
-> *Gambar 5.1 — Pengujian endpoint `POST /api/login` menggunakan Postman.*
->
-> Tangkapan layar ini memperlihatkan pengujian endpoint login dengan body JSON berisi email dan password. Response yang dikembalikan berstatus 200 dan memuat tiga kunci utama, yaitu `message`, `token`, dan `user`. Nilai `token` inilah yang nantinya disalin ke header `Authorization` untuk menguji endpoint-endpoint yang terproteksi.
-
-> **Template Gambar**
->
-> ![Pengujian endpoint GET contacts dengan Bearer Token](./docs/img/06-postman-contacts.png)
->
-> *Gambar 5.2 — Pengujian endpoint `GET /api/contacts` dengan Bearer Token.*
->
-> Pada gambar ini terlihat tab Authorization diisi dengan tipe Bearer Token beserta token hasil login sebelumnya. Response yang dikembalikan berupa array di dalam kunci `data`, dengan setiap elemen memuat data kontak lengkap beserta array `phones` di dalamnya. Struktur bersarang inilah bukti bahwa relasi one-to-many berhasil di-eager-load dan diformat oleh API Resource.
 
 ---
 
@@ -893,57 +875,7 @@ const showToast = useCallback(
 
 Setiap toast diberi id unik dari penghitung yang terus bertambah, sehingga beberapa notifikasi dapat tampil bersamaan tanpa saling menimpa. Timer penghapusan otomatis dipasang saat toast dibuat, namun pengguna tetap dapat menutupnya lebih cepat secara manual.
 
-### 6.8 Perbaikan Penting: Design Token Tailwind CSS v4
-
-Pada proses perapian frontend ditemukan sebuah masalah yang membuat hampir seluruh tampilan rusak. Seluruh komponen menggunakan kelas warna kustom seperti `bg-brand-600` dan `text-brand-700`, padahal palet `brand` tersebut tidak pernah didefinisikan di mana pun.
-
-Akar masalahnya terletak pada perubahan besar di Tailwind CSS v4. Pada versi ini, file `tailwind.config.js` tidak lagi menjadi sumber konfigurasi utama; token desain harus dideklarasikan langsung di dalam file CSS melalui blok `@theme`. Kelas yang tokennya tidak terdaftar tidak akan menghasilkan CSS sama sekali, dan yang membuatnya sulit terdeteksi adalah proses build tetap berhasil tanpa peringatan apa pun.
-
-```css
-@import "tailwindcss";
-
-@theme {
-    --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
-
-    /* Palet utama - hijau teduh, diturunkan dari warna brand lama #1f6b53 */
-    --color-brand-50: #f0f7f4;
-    --color-brand-100: #d9ece4;
-    --color-brand-200: #b4d9c9;
-    --color-brand-300: #85bfa9;
-    --color-brand-400: #559f86;
-    --color-brand-500: #35836b;
-    --color-brand-600: #1f6b53;
-    --color-brand-700: #195744;
-    --color-brand-800: #164537;
-    --color-brand-900: #12382d;
-
-    /* Animasi toast & modal */
-    --animate-toast-in: toast-in 0.25s cubic-bezier(0.21, 1.02, 0.73, 1);
-    --animate-fade-in: fade-in 0.15s ease-out;
-    --animate-pop-in: pop-in 0.18s cubic-bezier(0.21, 1.02, 0.73, 1);
-}
-
-@keyframes toast-in {
-    from { opacity: 0; transform: translateX(16px) scale(0.97); }
-    to   { opacity: 1; transform: translateX(0) scale(1); }
-}
-```
-
-Penamaan variabel mengikuti konvensi khusus yang dikenali Tailwind. Awalan `--color-` membuat token otomatis tersedia sebagai kelas `bg-*`, `text-*`, `border-*`, dan `ring-*`, sedangkan awalan `--animate-` menghasilkan kelas `animate-*`. Skala warna dibuat lengkap dari 50 hingga 900 agar tersedia varian terang untuk latar dan varian gelap untuk teks.
-
-Verifikasi dilakukan dengan memeriksa langsung file CSS hasil build dan memastikan seluruh kelas yang dipakai benar-benar tergenerate. Setelah perbaikan ini, tombol, cincin fokus, dan animasi toast kembali tampil sebagaimana mestinya.
-
-Pada kesempatan yang sama, file `app.css` juga dibersihkan dari sekitar 562 baris CSS sisa rancangan statis lama seperti `.sidebar`, `.workspace`, dan `.auth-shell` yang tidak lagi dipakai oleh satu pun komponen React.
-
-> **Template Gambar**
->
-> ![Perbandingan tampilan sebelum dan sesudah perbaikan token Tailwind](./docs/img/07-before-after-tailwind.png)
->
-> *Gambar 6.1 — Perbandingan tampilan sebelum dan sesudah perbaikan design token.*
->
-> Sisi kiri gambar memperlihatkan kondisi sebelum perbaikan, di mana tombol tampak transparan tanpa warna latar dan teks nyaris tidak terbaca. Sisi kanan menampilkan hasil setelah palet `brand` didaftarkan pada blok `@theme`, dengan tombol hijau yang solid dan hierarki visual yang jelas. Perbedaan ini menegaskan bahwa masalahnya murni pada konfigurasi token, bukan pada penulisan komponen.
-
-### 6.9 Desain Responsif
+### 6.8 Desain Responsif
 
 Antarmuka dirancang dengan pendekatan mobile-first dan diuji pada tiga rentang lebar layar. Pada layar kecil, Navbar menyembunyikan tombol-tombolnya ke dalam menu hamburger, tombol tambah kontak berubah menjadi tombol mengambang di pojok kanan bawah, dan grid kartu kontak menyusut menjadi satu kolom.
 
@@ -955,51 +887,44 @@ Satu baris kelas di atas mengatur perilaku grid pada tiga ukuran layar sekaligus
 
 Tombol aksi pada form juga disusun menggunakan `flex-col-reverse` di layar sempit, sehingga tombol utama selalu berada di posisi paling atas dan mudah dijangkau ibu jari.
 
-> **Template Gambar**
+> **Dokumentasi 5**
 >
-> ![Tampilan dashboard pada layar desktop](./docs/img/08-dashboard-desktop.png)
+> <img width="959" height="498" alt="Screenshot 2026-09-16 230318" src="https://github.com/user-attachments/assets/14d3e220-4fbb-4111-959b-4d8f0337fca1" />
 >
-> *Gambar 6.2 — Tampilan dashboard pada layar desktop.*
+> *Gambar 6.1 Tampilan dashboard pada layar desktop.*
 >
 > Gambar ini menampilkan dashboard dengan grid tiga kolom, kolom pencarian di bagian atas, dan Navbar lengkap berisi identitas pengguna. Setiap kartu kontak memuat avatar inisial, nama, email, nomor telepon utama beserta labelnya, dan potongan alamat. Tiga tombol aksi di bagian bawah kartu menyediakan akses cepat ke detail, edit, dan hapus.
 
-> **Template Gambar**
+> **Dokumentasi 6**
 >
-> ![Tampilan dashboard pada layar mobile](./docs/img/09-dashboard-mobile.png)
->
-> *Gambar 6.3 — Tampilan dashboard pada layar mobile.*
->
-> Pada lebar layar ponsel, grid menyusut menjadi satu kolom dan seluruh tombol Navbar berpindah ke dalam menu hamburger. Tombol tambah kontak berbentuk lingkaran mengambang muncul di pojok kanan bawah agar tetap mudah dijangkau. Tata letak ini memastikan seluruh informasi tetap terbaca tanpa perlu menggeser layar ke samping.
+> <img width="959" height="499" alt="Screenshot 2026-09-16 230433" src="https://github.com/user-attachments/assets/246f1999-1e73-45f5-aaa3-d9ddcc35504b" />
 
-> **Template Gambar**
 >
-> ![Halaman login aplikasi](./docs/img/10-login.png)
->
-> *Gambar 6.4 — Halaman login dengan layout dua kolom.*
+> *Gambar 6.2 Halaman login dengan layout dua kolom.*
 >
 > Halaman login menggunakan `AuthLayout` yang membagi layar menjadi dua bagian pada perangkat lebar. Panel kiri berisi identitas aplikasi dan deskripsi singkat, sedangkan panel kanan memuat form beserta tautan menuju halaman registrasi. Panel kiri otomatis disembunyikan pada layar kecil supaya form tetap menjadi fokus utama.
 
-> **Template Gambar**
+> **Dokumentasi 7**
 >
-> ![Form tambah kontak dengan editor nomor telepon](./docs/img/11-form-create.png)
+> <img width="950" height="499" alt="Screenshot 2026-09-16 230518" src="https://github.com/user-attachments/assets/bd9f9a28-5943-4e27-98b6-362a73b282ad" />
 >
-> *Gambar 6.5 — Form tambah kontak beserta editor nomor telepon dinamis.*
+> *Gambar 6.3 Form tambah kontak beserta editor nomor telepon dinamis.*
 >
 > Gambar ini memperlihatkan form dengan field nama, email, alamat, serta bagian nomor telepon yang dapat ditambah secara dinamis. Setiap baris nomor terdiri atas dropdown jenis dan input nomor, dilengkapi tombol hapus di sisi kanan. Tautan tambah nomor di bagian atas memungkinkan pengguna menyisipkan baris baru sebanyak yang dibutuhkan.
 
-> **Template Gambar**
+> **Dokumentasi 8**
 >
-> ![Notifikasi toast setelah kontak berhasil disimpan](./docs/img/12-toast-success.png)
+> <img width="896" height="292" alt="Screenshot 2026-09-16 230642" src="https://github.com/user-attachments/assets/5721d661-91bf-4e02-9ef3-57321809d916" />
 >
-> *Gambar 6.6 — Notifikasi toast setelah kontak berhasil disimpan.*
+> *Gambar 6.4 Notifikasi toast setelah kontak berhasil disimpan.*
 >
 > Setelah proses penyimpanan berhasil, notifikasi hijau muncul di pojok kanan atas berisi nama kontak yang baru ditambahkan. Notifikasi ini menghilang sendiri setelah beberapa detik, namun tetap dapat ditutup lebih cepat melalui tombol silang. Secara bersamaan, pengguna langsung diarahkan kembali ke dashboard sehingga dapat melihat hasilnya.
 
-> **Template Gambar**
+> **Dokumentasi 9**
 >
-> ![Dialog konfirmasi penghapusan kontak](./docs/img/13-confirm-delete.png)
+> <img width="449" height="496" alt="Screenshot 2026-09-16 230722" src="https://github.com/user-attachments/assets/cf8b531d-4620-4411-a5da-ea938d04e8d8" />
 >
-> *Gambar 6.7 — Dialog konfirmasi sebelum kontak dihapus.*
+> *Gambar 6.5 Dialog konfirmasi sebelum kontak dihapus.*
 >
 > Dialog ini muncul sebagai lapisan di atas halaman dengan latar belakang yang digelapkan dan sedikit diburamkan. Isi pesannya menyebutkan nama kontak secara eksplisit serta memperingatkan bahwa seluruh nomor telepon miliknya akan ikut terhapus. Dialog dapat ditutup melalui tombol batal, menekan tombol Escape, maupun mengklik area gelap di luar kotak.
 
@@ -1059,11 +984,11 @@ Nama file yang disebut dalam pesan error, yaitu `AuthContext.jsx`, sempat menyes
 
 Urutan penulisan bersifat wajib: `@viteReactRefresh` harus berada di atas `@vite`, sebab preamble perlu dimuat lebih dahulu sebelum modul React apa pun dieksekusi. Setelah perubahan disimpan, cukup lakukan hard refresh pada browser menggunakan `Ctrl + Shift + R` tanpa perlu menghidupkan ulang kedua server.
 
-> **Template Gambar**
+> **Dokumentasi 10**
 >
-> ![Pesan error preamble pada konsol browser](./docs/img/14-error-preamble.png)
+> <img width="902" height="515" alt="Screenshot 2026-09-16 174658" src="https://github.com/user-attachments/assets/ac726458-3b92-468b-a2b8-7ac337aba9f7" />
 >
-> *Gambar 7.1 — Pesan error preamble pada konsol DevTools.*
+> *Gambar 7.1 Pesan error preamble pada konsol DevTools.*
 >
 > Tangkapan layar ini memperlihatkan halaman yang tampil putih sepenuhnya di sisi kiri, berdampingan dengan panel konsol DevTools di sisi kanan. Pesan error berwarna merah menunjuk ke `AuthContext.jsx` baris 68, meski penyebab sebenarnya berada pada file Blade. Kasus ini menjadi pengingat bahwa lokasi yang disebut pada pesan error tidak selalu merupakan sumber masalah yang sesungguhnya.
 
@@ -1083,10 +1008,10 @@ npm install
 Setelah persiapan selesai, aplikasi dijalankan menggunakan dua terminal terpisah yang keduanya berada di direktori yang sama.
 
 ```powershell
-# Terminal 1 — Vite dev server (mengompilasi React & CSS)
+# Terminal 1 - Vite dev server (mengompilasi React & CSS)
 npm run dev
 
-# Terminal 2 — Laravel server (menyajikan API & halaman)
+# Terminal 2 - Laravel server (menyajikan API & halaman)
 php artisan serve
 ```
 
@@ -1094,37 +1019,27 @@ Kedua proses harus tetap berjalan selama pengembangan dan tidak boleh ditutup. A
 
 ---
 
-## 8. Kesimpulan & Dokumentasi Prompt
+## 8. Dokumentasi Prompt
 
-### 8.1 Kesimpulan
+### 8.1 Peran AI dalam Pembangunan Frontend
 
-Project ini berhasil mewujudkan aplikasi manajemen kontak dengan arsitektur terpisah antara REST API Laravel 11 dan antarmuka React. Seluruh butir spesifikasi terpenuhi, mencakup struktur database dengan relasi one-to-many, autentikasi berbasis token Sanctum, lima endpoint CRUD yang mengikuti kaidah RESTful, serta response JSON yang diformat melalui API Resource.
-
-Di sisi frontend, seluruh halaman yang disyaratkan telah tersedia dan dinavigasi menggunakan React Router DOM. Axios dikonfigurasi dengan interceptor yang menyisipkan Bearer Token secara otomatis sekaligus menangani token kedaluwarsa. Antarmuka dipecah menjadi empat belas komponen reusable dan dilengkapi state visual yang jelas untuk kondisi memuat, gagal, maupun berhasil.
-
-Pelajaran teknis paling berharga dari project ini justru datang dari kendala yang ditemui. Kasus design token Tailwind v4 mengajarkan bahwa build yang berhasil tidak menjamin hasil yang benar, sebab kelas yang tokennya tidak terdaftar gagal secara diam-diam tanpa satu pun peringatan. Sementara kasus preamble React menegaskan bahwa lokasi yang ditunjuk sebuah pesan error belum tentu merupakan sumber masalahnya, sehingga penelusuran perlu dilakukan sampai ke lapisan konfigurasi.
-
-Kesimpulan lain yang tak kalah penting menyangkut cara kerja dengan bantuan AI. Kualitas hasil sangat bergantung pada kelengkapan konteks yang diberikan di awal, dan kemampuan membaca ulang kode yang dihasilkan tetap mutlak diperlukan. Pada project ini, kekeliruan berupa directive `@viteReactRefresh` yang terlewat justru berasal dari kode hasil bantuan AI, dan baru terdeteksi ketika aplikasi dijalankan langsung di browser.
-
-### 8.2 Peran AI dalam Pembangunan Frontend
-
-Bagian frontend project ini dibangun dengan bantuan AI melalui pendekatan iteratif. Alurnya berjalan dalam empat tahap: penyampaian spesifikasi lengkap di awal, pembangunan struktur dan komponen, perapian serta perbaikan bug, dan terakhir penelusuran kendala saat aplikasi dijalankan.
+Tentunya pada bagian frontend project ini penulis menggunakan bantuan AI melalui pendekatan iteratif. Alurnya berjalan dalam empat tahap: penyampaian spesifikasi lengkap di awal, pembangunan struktur dan komponen, perapian serta perbaikan bug, dan terakhir penelusuran kendala saat aplikasi dijalankan.
 
 Pola yang terbukti efektif adalah memberikan konteks selengkap mungkin di prompt pertama, mencakup file project, materi rujukan, dan spesifikasi yang terperinci. Dengan konteks semacam itu, AI dapat memeriksa kode yang sudah ada dan menemukan masalah yang belum disadari, alih-alih sekadar menghasilkan kode baru yang belum tentu nyambung dengan struktur project.
 
-### 8.3 Dokumentasi Prompt yang Digunakan
+### 8.2 Dokumentasi Prompt yang Digunakan
 
 Berikut prompt-prompt penting yang dipakai sepanjang pembangunan frontend, disusun berurutan sesuai tahapannya.
 
 ---
 
-#### Prompt 1 — Spesifikasi Awal (Prompt Utama)
+#### Prompt 1 Spesifikasi Awal (Prompt Utama)
 
 **Tahap:** Pembangunan dan perapian struktur frontend
-**Lampiran:** `kontak-app-fullstack.zip`, `Slide_Suplemen_Pertemuan_5_Pemrograman_Internet.html`
+**Lampiran:** `kontak-app.zip`, `Slide_Suplemen_Pertemuan_5_Pemrograman_Internet.html`
 
 ```
-aku kan ada file zip kontak api fullstack, sekarang coba bantu aku dalam
+aku kan ada file .zip kontak api, sekarang coba bantu aku dalam
 merapikan frontendnya agar sesuai dengan yang aku maksud seperti di bawah ini:
 
 Spesifikasi Backend (Laravel):
@@ -1140,8 +1055,8 @@ Spesifikasi Backend (Laravel):
 - Pastikan semua response dikembalikan dalam format JSON yang rapi
   (menggunakan API Resource jika memungkinkan).
 
-namun dalam membuat backend ini, sesuaikan dengan slide suplemen yang aku
-berikan ya
+Namun dalam membuat backend ini, sesuaikan dengan slide suplemen yang aku
+berikan
 
 Spesifikasi Frontend (React):
 - Gunakan React Router DOM untuk navigasi halaman: /register, /login, /
@@ -1164,17 +1079,15 @@ Pedoman Desain UI/UX (Komponen):
 
 **Mengapa prompt ini efektif.** Prompt ini menyertakan tiga elemen sekaligus, yaitu file project yang sudah ada, materi rujukan berupa slide suplemen, dan spesifikasi yang diuraikan per butir. Kelengkapan konteks tersebut memungkinkan AI memeriksa kode yang sudah ditulis sebelumnya alih-alih memulai dari nol.
 
-**Hasil yang diperoleh.** Dari prompt ini ditemukan bug palet `brand` yang tidak terdefinisi di `@theme`, yang sebelumnya sama sekali tidak disadari karena proses build tetap berjalan tanpa error. Selain itu dihasilkan sepuluh komponen reusable baru dan pembersihan 562 baris CSS mockup lama yang sudah tidak terpakai.
-
 ---
 
-#### Prompt 2 — Klarifikasi Prosedur Menjalankan Aplikasi
+#### Prompt 2 Klarifikasi Prosedur Menjalankan Aplikasi
 
 **Tahap:** Persiapan menjalankan aplikasi
 
 ```
 kamu kan bilang ini cara jalanin nya itu aku jalaninnya di terminal dan
-berada di dalam folder /kontak-api nya kan ?, setelahnya aku baru jalanin
+berada di dalam folder /kontak-api nya kan?, setelahnya aku baru jalanin
 npm run dev dan artisan serve di 2 terminal yang berbeda tapi di folder
 yang sama?
 ```
@@ -1185,7 +1098,7 @@ yang sama?
 
 ---
 
-#### Prompt 3 — Penelusuran Error PowerShell
+#### Prompt 3 Penelusuran Error PowerShell
 
 **Tahap:** Debugging environment
 
@@ -1200,13 +1113,13 @@ The token '&&' is not a valid statement separator in this version.
 di urutan ke 2 ada error
 ```
 
-**Mengapa prompt ini efektif.** Pesan error ditempelkan secara utuh apa adanya, termasuk bagian `CategoryInfo` dan `FullyQualifiedErrorId` yang sering dianggap tidak penting. Justru detail semacam itulah yang mempercepat identifikasi sumber masalah.
+**Mengapa prompt ini efektif.** Pesan error ditempelkan secara utuh apa adanya, termasuk bagian `CategoryInfo` dan `FullyQualifiedErrorId` yang sering dianggap tidak penting.
 
 **Hasil yang diperoleh.** Teridentifikasi bahwa penyebabnya adalah perbedaan sintaks shell antara bash dan Windows PowerShell 5.1, bukan kesalahan pada kode maupun konfigurasi project.
 
 ---
 
-#### Prompt 4 — Penelusuran Error Preamble React
+#### Prompt 4 Penelusuran Error Preamble React
 
 **Tahap:** Debugging runtime
 **Lampiran:** Tangkapan layar konsol DevTools
@@ -1218,7 +1131,7 @@ AuthContext.jsx:68 Uncaught Error: @vitejs/plugin-react can't detect preamble.
 Something is wrong.
     at AuthContext.jsx:68:1
 
-tetep eror gak mau kebuka dia
+Ada terjadi error di mana websitenya tidak bisa dibuka, ini pesan error yang ditampilkan di DevTools.
 ```
 
 **Mengapa prompt ini efektif.** Prompt ini melampirkan tangkapan layar konsol sekaligus menegaskan bahwa solusi sebelumnya belum berhasil. Informasi bahwa upaya pertama gagal sangat membantu karena mempersempit kemungkinan penyebab dan mencegah saran yang berulang.
@@ -1227,48 +1140,9 @@ tetep eror gak mau kebuka dia
 
 ---
 
-#### Prompt 5 — Penyusunan Laporan
-
-**Tahap:** Dokumentasi
-
-```
-sekarang aku akan membuat sebuah laporan yang membahas tentang apa yang
-sudah kita buat sampai ini, untuk strukturnya itu kurang lebih seperti ini
-1. Instalasi Project Laravel 11 dan Database SQLite
-2. Setup API & Sanctum Authentication
-3. Database Migration
-4. Pembuatan Controller
-5. Registrasi API Route
-6. Integrasi ke Frontend (React Vite)
-
-kira kira ini saja sudah cukup atau tidak, rencananya aku itu hanya ingin
-membahas hal hal yang penting saja, berikan ide struktur dulu ya sebelum
-lanjut buat laporan fullnya
-```
-
-**Mengapa prompt ini efektif.** Struktur dimintakan terlebih dahulu sebelum meminta isi laporan secara utuh. Pendekatan bertahap semacam ini memungkinkan penyesuaian kerangka di awal, sehingga tidak perlu membongkar ulang dokumen panjang yang sudah terlanjur ditulis.
-
-**Hasil yang diperoleh.** Kerangka awal disepakati untuk diperluas dengan pemecahan bagian frontend menjadi beberapa subbagian, penambahan bab debugging, serta dokumentasi prompt pada bagian kesimpulan.
-
----
-
-### 8.4 Refleksi Penggunaan AI
-
-Dari kelima prompt di atas dapat ditarik beberapa pola yang terbukti berpengaruh terhadap kualitas hasil.
-
-Pertama, melampirkan file project secara langsung jauh lebih efektif dibanding menjelaskannya dengan kata-kata. AI dapat membaca struktur yang sebenarnya dan menemukan masalah yang tidak disadari, seperti pada kasus palet `brand` yang hilang.
-
-Kedua, pesan error sebaiknya ditempelkan secara utuh tanpa diringkas. Bagian yang terlihat tidak penting justru kerap menjadi kunci identifikasi, dan menyebutkan bahwa solusi sebelumnya sudah dicoba namun gagal akan mempersempit ruang kemungkinan secara signifikan.
-
-Ketiga, meminta kerangka sebelum meminta keseluruhan isi terbukti menghemat banyak waktu. Menyepakati struktur di awal jauh lebih murah dibanding merombak dokumen panjang yang sudah selesai ditulis.
-
-Keempat, dan yang paling penting, setiap kode hasil bantuan AI wajib diuji langsung. Kasus directive `@viteReactRefresh` yang terlewat membuktikan bahwa kode yang tampak benar secara logika sekalipun tetap bisa gagal saat dijalankan, dan hanya pengujian nyata yang mampu mengungkapnya.
-
----
-
 ## Lampiran: Referensi
 
-1. Slide Suplemen Pertemuan 5 — Tutorial Hands-On Laravel REST API & SQLite, Pemrograman Internet, Teknologi Informasi Universitas Udayana.
+1. Slide Suplemen Pertemuan 5 - Tutorial Hands-On Laravel REST API & SQLite, Pemrograman Internet, Teknologi Informasi Universitas Udayana.
 2. Dokumentasi Laravel 11 — <https://laravel.com/docs/11.x>
 3. Dokumentasi Laravel Sanctum — <https://laravel.com/docs/11.x/sanctum>
 4. Dokumentasi React Router — <https://reactrouter.com>
